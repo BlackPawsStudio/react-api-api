@@ -1,8 +1,10 @@
 import * as bodyParser from 'body-parser';
 import { addCard, deleteCard, getAllCards, getCardByTitle } from './functions';
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
+app.use(cors('*'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const port = 3001;
