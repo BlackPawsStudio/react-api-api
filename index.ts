@@ -1,5 +1,5 @@
 import * as bodyParser from 'body-parser';
-import { addCard, deleteCard, getAllCards, getCardByTitle } from './functions';
+import { addCard, deleteCard, getAllCards, getCardByTitle, getCardsPage, sortCards } from './functions';
 const express = require('express');
 const cors = require('cors');
 
@@ -11,12 +11,16 @@ const port = 3001;
 
 export const cards = [];
 
-app.get('/cards', getAllCards);
+app.get('/allCards', getAllCards);
+
+app.get('/cards', getCardsPage);
 
 app.post('/card', addCard);
 
 app.get('/search', getCardByTitle);
 
 app.delete('/card', deleteCard);
+
+app.get('/sort', sortCards)
 
 app.listen(process.env.PORT || port, () => console.log(`Running on port ${port}`));

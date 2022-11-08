@@ -7,7 +7,7 @@ export const sortArrayByParam = (arr, param, isAsc) => {
 };
 
 export const getLowestId = (id, arr) =>
-  typeof arr.find((el) => el === id) === 'number' ? getLowestId(++id, arr) : id;
+  arr.find((el) => el.id === id) ? getLowestId(++id, arr) : id;
 
 export const getAllCards = (_, res) => {
   res.send(cards);
@@ -25,7 +25,8 @@ export const getCardByTitle = (req, res) => {
 
 export const addCard = (req: express.Request, res) => {
   const data = req.body;
-  data.id = getLowestId(0, cards);
+  const dataId = getLowestId(0, cards);
+  data.id = dataId;
   cards.push(data);
   sortArrayByParam(cards, 'id', true);
   res.status(201).send('Created');
@@ -37,3 +38,22 @@ export const deleteCard = (req, res) => {
   cards.splice(cardId, 1);
   res.status(202).send('Deleted');
 };
+
+export const sortCards = (req, res) => {
+  const param = req.query.param;
+  const sortedCards = sortArrayByParam(cards, param, true);
+  cards.map((el, id) => {
+    el = sortedCards[id];
+  })
+  res.status(200).send(cards);
+};
+
+export const getCardsPage = (req, res) => {
+  const step = 4;
+  const pageId = req.query.id;
+  const requestedCards = cards.concat().splice(pageId * step, step);
+  res.status(200).send({
+    cards: requestedCards,
+    amount: cards.length,
+  })
+}
